@@ -1,13 +1,12 @@
 import cv2
-import os 
-
+import os
 
 face_cascades = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 def detect_faces(img, draw_box=True):
     grayscale_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    faces  =face_cascades.detectMultiScale(grayscale_img,scaleFactor=1.6)
+    faces = face_cascades.detectMultiScale(grayscale_img,scaleFactor=1.6)
 
     for (x,y,width,height) in faces:
         if draw_box:

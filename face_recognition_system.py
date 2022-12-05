@@ -23,7 +23,6 @@ if 'true_img.png' not in files:
 
 # load pre-trained Siamese neural network
 model = load_model('siamese_nn.h5', custom_objects={'contrastive_loss': utils.contrastive_loss, 'euclidean_distance': utils.euclidean_distance})
-
 # prepare the true image obtained during onboard
 true_img = cv2.imread('true_img.png', 0)
 true_img = true_img.astype('float32')/255

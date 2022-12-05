@@ -2,6 +2,7 @@ import cv2
 import math
 import utils
 import FaceDetection
+import time
 
 video_capture = cv2.VideoCapture(0)
 counter = 5

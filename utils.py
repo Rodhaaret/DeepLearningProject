@@ -48,8 +48,8 @@ def create_pairs(X,Y, num_classes):
             img2 = X[class_idx[neg_c][n]]
             pairs.append((img1,img2))
             labels.append(0)
-
-    return np.array(pairs), np.array(labels)
+    # The .astype(np.float32) is added by me to match Tensorflow
+    return np.array(pairs).astype(np.float32), np.array(labels).astype(np.float32)
 
 def create_shared_network(input_shape):
     model = Sequential(name='Shared_Conv_Network')
@@ -75,13 +75,12 @@ def get_data(dir):
             else:
                 X_test.append(img)
                 Y_test.append(idx-35)
-
-    X_train = np.array(X_train)
-    X_test = np.array(X_test)
-    Y_train = np.array(Y_train)
-    Y_test = np.array(Y_test)
+    # The .astype(np.float32) is added by me to match Tensorflow
+    X_train = np.array(X_train).astype(np.float32)
+    X_test = np.array(X_test).astype(np.float32)
+    Y_train = np.array(Y_train).astype(np.float32)
+    Y_test = np.array(Y_test).astype(np.float32)
     return (X_train, Y_train), (X_test, Y_test)
-
 
 
 def write_on_frame(frame, text, text_x, text_y):

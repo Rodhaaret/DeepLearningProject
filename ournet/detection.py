@@ -1,10 +1,10 @@
+import torch
 from torch import nn, optim, as_tensor
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 from torch.optim import lr_scheduler
 from torch.nn.init import *
 from torchvision import transforms, utils, datasets, models
-import torch
 
 # from models.inception_resnet_v1 import InceptionResnetV1
 from torchvision.models.inception import inception_v3 , Inception_V3_Weights
@@ -34,24 +34,24 @@ vidcap = cv2.VideoCapture(0)
 
 old = [0,0,0,0]
 count = 0
-myfolder = os.path.dirname(__file__)
-
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+myfolder = os.path.dirname(__file__) 
 
 def load_data():
     data_transform = {
     'train': transforms.Compose([
         transforms.RandomHorizontalFlip(),
+        transforms.Resize((299,299)),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
     'valid': transforms.Compose([
+        transforms.Resize((299,299)),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
     }
-    image_datasets = {x: datasets.ImageFolder(os.path.join(myfolder + '\\data', x),
+
+    image_datasets = {x: datasets.ImageFolder(os.path.join(myfolder + '/data', x),
                                             data_transform[x])
                     for x in ['train', 'valid']}
     dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
@@ -180,20 +180,17 @@ def train(model, loader_train, loader_valid, lr=1e-3, max_epochs=10, weight_deca
         if epoch > best_valid_accuracy_epoch + patience:
             break
     t.set_description(f'best valid acc: {best_valid_accuracy:.2f}')
-
     return train_losses, train_accuracies, valid_losses, valid_accuracies
 
 
 def train_net():
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     dataloader = load_data()
     pretrained_model = inception_v3(weights=Inception_V3_Weights.DEFAULT)
-    pretrained_model.fc = nn.Linear(pretrained_model.fc.in_features, 1)
-    # plot_history(*train(pretrained_model,dataloader['train'], dataloader['valid']))
-    for x, y in dataloader['train']:
-        print(x)
-        print(y)
-
-    
+    pretrained_model.fc = nn.Linear(pretrained_model.fc.in_features, 3)
+    pretrained_model.aux_logits=False
+    pretrained_model = pretrained_model.to(device)
+    plot_history(*train(pretrained_model,dataloader['train'], dataloader['valid']))
 
 
 train_net()

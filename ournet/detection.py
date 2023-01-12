@@ -40,12 +40,14 @@ def load_data():
     data_transform = {
     'train': transforms.Compose([
         transforms.RandomHorizontalFlip(),
-        transforms.Resize((299,299)),
+        transforms.Resize(299),
+        transforms.CenterCrop(299),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
     'valid': transforms.Compose([
-        transforms.Resize((299,299)),
+        transforms.Resize(299),
+        transforms.CenterCrop(299),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),

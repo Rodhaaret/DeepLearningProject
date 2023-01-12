@@ -77,9 +77,9 @@ def capture_dataset():
             cv2.rectangle(frame,(x,y), (x+w,y+h),(0,255,0),2)
             cv2.imshow('frame', frame)
             if count < 150:
-                cv2.imwrite(myfolder +'/data/train/face_thomas/thomas'+ str(count)+ '.png', resized)
+                cv2.imwrite(myfolder +'/data/train/face_rasmus/rasmus'+ str(count)+ '.png', resized)
             else:
-                cv2.imwrite(myfolder +'/data/valid/face_thomas/thomas'+ str(count)+ '.png', resized)
+                cv2.imwrite(myfolder +'/data/valid/face_rasmus/rasmus'+ str(count)+ '.png', resized)
             count += 1
         if len(face) != 0:
             old = face[0]
@@ -187,6 +187,7 @@ def train_net():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     dataloader = load_data()
     pretrained_model = inception_v3(weights=Inception_V3_Weights.DEFAULT)
+<<<<<<< Updated upstream
     pretrained_model.fc = nn.Linear(pretrained_model.fc.in_features, 3)
     pretrained_model.aux_logits=False
     pretrained_model = pretrained_model.to(device)
@@ -194,3 +195,13 @@ def train_net():
 
 
 train_net()
+=======
+    pretrained_model.fc = nn.Linear(pretrained_model.fc.in_features, 1)
+    # plot_history(*train(pretrained_model,dataloader['train'], dataloader['valid']))
+    for x, y in dataloader['train']:
+        print(x)
+        print(y)
+
+    
+capture_dataset()
+>>>>>>> Stashed changes
